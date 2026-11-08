@@ -1,11 +1,10 @@
 # XSS Awareness Lab
 
 An educational web-security demo built around a fictional student portal
-("Northgate Polytechnic") and a Y2K-themed browser photo booth. It
-illustrates **stored XSS** and how it chains into a browser-exploitation
+("Northgate Polytechnic")
+It illustrates **stored XSS** and how it chains into a browser-exploitation
 framework (**BeEF**) inside an isolated, authorized lab.
 
-**🌐 Live demo (safe mode):** _enabled once GitHub Pages is live_
 **🧪 Lab mode:** clone and run on `localhost` — the Q&A board becomes
 intentionally vulnerable so you can walk through a real injection → hook
 flow.
@@ -44,19 +43,6 @@ flow.
    difference between a vulnerable and a hardened board, and it is
    the same mitigation real frameworks (React, Vue, Jinja autoescape)
    apply by default.
-
-## Live site vs. lab mode
-
-| Host                   | Q&A rendering  | Why                                |
-|------------------------|----------------|------------------------------------|
-| `localhost` / `127.0.0.1` / `file://` | **Unescaped** (lab) | Local demo, authorized lab use     |
-| Any other hostname     | **Escaped** (safe)   | A deliberately-vulnerable app should not be publicly reachable |
-
-The toggle is a hostname check at the top of [`portal.js`](portal.js).
-This is deliberate: hosting live stored-XSS on the public web turns a
-demo into a real attack surface. Running the lab locally is also what
-every mainstream intentionally-vulnerable training app (DVWA, WebGoat,
-Juice Shop) does, and for the same reason.
 
 ## Tech used
 
