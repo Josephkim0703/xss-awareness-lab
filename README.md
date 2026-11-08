@@ -1,13 +1,16 @@
 # XSS Awareness Lab
 
 An educational web-security demo built around a fictional student portal
-("Northgate Polytechnic"). It shows how **stored cross-site scripting
-(XSS)** on an ordinary-looking page can chain into a browser-exploitation
-framework (**BeEF**) inside an isolated, authorized lab.
+("Northgate Polytechnic"). It shows the two main real-world ways an
+attacker gets a BeEF **hook** into a victim's browser — an **app-layer**
+path (**stored XSS**) and a **network-layer** path (**bettercap MITM**) —
+and why fixing one does not defend against the other. Isolated,
+authorized lab use only.
 
 **🧪 Local lab:** clone and run on `localhost` — the Q&A board becomes
 vulnerable, so posting a crafted question hooks everyone who views the
-board via BeEF.
+board via BeEF. Pair it with bettercap on an isolated subnet for the
+network-layer half of the demo.
 
 > ⚠️ **Scope / ethics.** For authorized security-education labs on
 > machines and accounts you own or are explicitly allowed to test.
@@ -22,30 +25,49 @@ board via BeEF.
    search, events), so browser prompts and credential fields feel
    in-context — the same dynamic that makes real phishing effective.
 
-2. **Stored cross-site scripting (XSS) as the only attack vector.**
-   The Q&A board is a deliberately-vulnerable implementation:
-   user-submitted question titles and bodies are concatenated into the
-   DOM without escaping. A posted `<script>` executes for every browser
-   that loads the board. No toggle, no admin flag, no setup — it is
-   simply how the page renders.
+2. **Two independent paths to the same BeEF hook.**
+   - **Stored cross-site scripting (XSS).** The Q&A board is a
+     deliberately-vulnerable implementation: user-submitted question
+     titles and bodies are concatenated into the DOM without escaping.
+     A posted `<script>` executes for every browser that loads the
+     board. The fault is in the *site*.
+   - **Network MITM with bettercap.** On an isolated lab subnet,
+     bettercap ARP-spoofs the gateway and rewrites plain-HTTP traffic
+     in transit (`http.proxy.injectjs`) to add the hook to *any* page
+     the victim loads. The target site doesn't have to be vulnerable;
+     the *network path* is.
 
-3. **The "no interaction" property.** Stored XSS doesn't require the
-   victim to click anything. The payload runs when the page is parsed
-   into the DOM — no scroll, no click, no visible indication.
+3. **The "no interaction" property (for either vector).** The victim
+   doesn't have to click anything. The payload runs when the page is
+   parsed into the DOM — no scroll, no click, no visible indication.
 
 4. **How BeEF fits in.** BeEF is **not** the injector; it's the C2
    panel for browsers that are already hooked. Getting `hook.js` onto
-   the page is the attack vector — in this lab, that vector is the
-   board's stored XSS. The hook is never baked into the HTML: it only
-   arrives when a payload is posted. Once a browser is hooked, BeEF
-   can run modules against it.
+   the page is the attack vector — in this lab, two different vectors
+   land at the same BeEF endpoint. The hook is never baked into the
+   repo's HTML: it only arrives when a payload is posted (XSS) or when
+   the network path is tampered with (bettercap).
 
-5. **The defensive fix.** The exact same code path would be safe if
-   the title and body were escaped before rendering (as the public
-   build does on GitHub Pages). That one-line difference — treat user
-   input as text, not HTML — is the same mitigation real frameworks
-   apply by default (React/Vue text interpolation, Jinja autoescape,
-   `textContent` vs `innerHTML`).
+5. **The defensive fixes — one per vector.**
+   - Against stored XSS: escape user input before rendering (what the
+     public build does on GitHub Pages). This is the mitigation real
+     frameworks apply by default — React/Vue text interpolation,
+     Jinja autoescape, `textContent` vs `innerHTML`.
+   - Against bettercap MITM: end-to-end **TLS with HSTS**. The
+     app itself cannot defend against a tampered network path; only
+     encryption and trust-on-first-use protections do.
+
+## Attack-vector comparison
+
+| Vector                                | Fault lies with | How the hook lands                                           | Real-world defence              |
+|---------------------------------------|-----------------|--------------------------------------------------------------|---------------------------------|
+| **Stored XSS** (this lab's Q&A board) | The site        | Attacker posts a payload; viewers run it on page load        | Escape user input before render |
+| **Bettercap MITM**                    | The network path | Attacker ARP-spoofs gateway; HTTP responses are rewritten to add the hook | End-to-end TLS + HSTS           |
+
+The lesson is that patching one vector does not protect against the
+other — a perfectly-coded site still loses a user on a rogue hotspot,
+and a perfectly-encrypted session on a vulnerable site is still
+exploitable.
 
 ## Live site vs. local lab
 
@@ -67,6 +89,8 @@ Juice Shop) does, and for the same reason.
 - **GitHub Pages** for the safe public deployment.
 - **BeEF** (external — you run it on your own lab host) as the C2 for
   the hook demonstration.
+- **Bettercap** (external — you run it on your own isolated lab subnet)
+  for the network-layer injection demo.
 
 ## Run it locally
 
@@ -76,8 +100,9 @@ python -m http.server 8000
 
 Then open `http://localhost:8000`.
 
-See **[LAB-SETUP.md](LAB-SETUP.md)** for the full stored-XSS → BeEF
-walkthrough.
+See **[LAB-SETUP.md](LAB-SETUP.md)** for the full step-by-step on both
+vectors — stored XSS → BeEF and bettercap MITM → BeEF — plus HTTPS/HSTS
+caveats and scope warnings.
 
 ## Project layout
 
@@ -89,7 +114,7 @@ booth.html       Alternate photo-booth demo host (optional)
 styles.css       Base styles for the photo booth
 theme-y2k.css    Y2K / holographic skin for the photo booth
 app.js           Camera + live canvas filters + photo strip
-LAB-SETUP.md     Full BeEF + stored-XSS demo walkthrough
+LAB-SETUP.md     Full BeEF walkthrough — stored-XSS + bettercap MITM
 ```
 
 ## What this project is NOT
