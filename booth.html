@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LENS☆LOFT — Y2K Photo Booth ⭐</title>
+    <meta
+      name="description"
+      content="Cyber-cute browser photo booth. Chrome, sparkles, and 12 live filters — snap, deco, download."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme-y2k.css" />
+  </head>
+  <body class="theme-y2k">
+ 
+    <div class="aurora" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#">
+        <span class="brand-mark">☆</span>
+        <span class="brand-name">LENS☆LOFT</span>
+      </a>
+      <nav class="nav">
+        <a href="#booth">Booth</a>
+        <a href="#filters">Filters</a>
+        <a href="#signup">Sign</a>
+        <a href="#how">How to</a>
+      </nav>
+      <div class="live-count">
+        <span class="dot"></span>
+        <span id="liveCount">0</span> · online now ✧
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">✧ no app · no login · 100% browser ✧</p>
+          <h1>Sparkle <span class="grad">glow-up</span> mode.</h1>
+          <p class="sub">
+            Chrome hearts, cyber sparkle, 12 live filters. Hit the star, strike
+            a pose, and watch yourself go full cyber-cute in real time. ✦
+          </p>
+          <div class="hero-cta">
+            <button class="btn btn-primary" id="startBtn">☆ Open booth</button>
+            <a class="btn btn-ghost" href="#how">how it works</a>
+          </div>
+          <ul class="trust">
+            <li>★★★★★ <strong>4.9</strong> · 38,204 snaps</li>
+            <li>🔒 photos stay on your device</li>
+          </ul>
+        </div>
+        <div class="hero-art">
+          <div class="float-card c1">☆ Kira</div>
+          <div class="float-card c2">✦ Cyber</div>
+          <div class="float-card c3">♡ Retro</div>
+          <div class="phone">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">📸</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="booth" id="booth">
+        <div class="booth-stage">
+          <div class="stage-frame">
+            <video id="video" autoplay playsinline muted></video>
+            <canvas id="canvas"></canvas>
+            <div class="stage-overlay" id="stageIdle">
+              <div class="overlay-inner">
+                <div class="overlay-icon">📷</div>
+                <h3>Camera off</h3>
+                <p>
+                  Turn it on to start the sparkle. Runs only while this tab is
+                  open ✧
+                </p>
+                <button class="btn btn-primary" id="enableBtn">
+                  ☆ Enable camera
+                </button>
+                <p class="mini">
+                  Your browser asks for camera access — that's the popup ♡
+                </p>
+              </div>
+            </div>
+            <div class="flash" id="flash"></div>
+            <div class="countdown" id="countdown"></div>
+            <div class="stage-chip" id="filterChip">Filter: None</div>
+          </div>
+          <div class="booth-controls">
+            <button class="ctrl" id="surpriseBtn" title="Surprise me">
+              🎲
+            </button>
+            <button class="shutter" id="shutterBtn" title="Take photo" disabled>
+              <span class="shutter-ring"></span>
+            </button>
+            <button class="ctrl" id="stripBtn" title="4-shot strip" disabled>
+              🎞️
+            </button>
+          </div>
+        </div>
+        <aside class="filmstrip" id="filmstrip">
+          <h4>Your snaps <span class="muted" id="shotCount">(0)</span></h4>
+          <div class="shots" id="shots">
+            <p class="empty">
+              Your pics land here ☆ download or clear anytime — nothing is
+              uploaded.
+            </p>
+          </div>
+          <div class="strip-actions">
+            <button class="btn btn-sm" id="downloadAllBtn" disabled>
+              Download all
+            </button>
+            <button class="btn btn-sm btn-ghost" id="clearBtn" disabled>
+              Clear
+            </button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="filters" id="filters">
+        <h2>☆ Pick a vibe</h2>
+        <p class="section-sub">Tap to apply live. Instant — no render wait ✧</p>
+        <div class="filter-grid" id="filterGrid"></div>
+      </section>
+
+      <section class="how" id="how">
+        <h2>3 taps & done ☆</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <h4>Enable camera</h4>
+            <p>
+              Your browser pops a permission request. Say yes — the live preview
+              appears.
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <h4>Pick a filter</h4>
+            <p>
+              Flip through 12 chrome-cute looks. Everything previews in real
+              time.
+            </p>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <h4>Snap &amp; save</h4>
+            <p>
+              Star button for one shot, film icon for a 4-frame strip. Download
+              instantly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="signup" id="signup">
+        <div class="signup-card">
+          <h2>☆ Sign your photo strip</h2>
+          <p class="section-sub">
+            Add your name and we'll print it on your downloads. Want your gallery
+            link sent over? Drop your email too — totally optional ✧
+          </p>
+          <form id="signForm" class="sign-form" autocomplete="on">
+            <label>
+              Your name
+              <input type="text" id="fName" name="name" placeholder="e.g. Kira ☆" />
+            </label>
+            <label>
+              Email (optional)
+              <input type="email" id="fEmail" name="email" placeholder="you@email.com" />
+            </label>
+            <label>
+              Caption for your strip
+              <input type="text" id="fCaption" name="caption" placeholder="best day ever ✦" />
+            </label>
+            <button type="submit" class="btn btn-primary">☆ Save my strip</button>
+          </form>
+          <p class="sign-status" id="signStatus" hidden></p>
+        </div>
+      </section>
+
+      <section class="notify" id="notify">
+        <div class="notify-card">
+          <div>
+            <h3>🔔 New filter alerts</h3>
+            <p>
+              Fresh filters every Friday. Turn on alerts and we'll ping you when
+              the week's drop goes live ✦
+            </p>
+          </div>
+          <button class="btn btn-primary" id="notifyBtn">
+            ☆ Turn on alerts
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>LENS☆LOFT · Y2K edition · demo booth for a security-awareness lab.</p>
+    </footer>
+
+    <script>
+      window.LENSLOFT_LABELS = {
+        none: { name: "Pure", emoji: "✧" },
+        mono: { name: "Chrome", emoji: "⚙" },
+        retro: { name: "Retro", emoji: "♡" },
+        vapor: { name: "Cyber", emoji: "✦" },
+        neon: { name: "Kira", emoji: "★" },
+        frost: { name: "Ice", emoji: "❄" },
+        noir: { name: "Noir", emoji: "◆" },
+        sunset: { name: "Sunset", emoji: "☀" },
+        invert: { name: "Reverse", emoji: "✚" },
+        dream: { name: "Dream", emoji: "☁" },
+        pixel: { name: "Pixel", emoji: "▣" },
+        thermal: { name: "Thermal", emoji: "♨" },
+      };
+    </script>
+    <script>
+      // "Sign your photo strip" form — local only, no network.
+      // Remembers the name in localStorage and shows a confirmation.
+      (function () {
+        var f = document.getElementById("signForm");
+        if (!f) return;
+        var status = document.getElementById("signStatus");
+        var nameEl = document.getElementById("fName");
+        try {
+          var saved = localStorage.getItem("lensloft_name");
+          if (saved) nameEl.value = saved;
+        } catch (e) {}
+        f.addEventListener("submit", function (e) {
+          e.preventDefault();
+          var name = (nameEl.value || "").trim();
+          try {
+            if (name) localStorage.setItem("lensloft_name", name);
+          } catch (e) {}
+          status.hidden = false;
+          status.textContent = name
+            ? "Thanks, " + name + "! Your strip is signed ☆"
+            : "Saved ☆ add a name to sign your strip.";
+        });
+      })();
+    </script>
+    <script src="app.js"></script>
+  </body>
+</html>

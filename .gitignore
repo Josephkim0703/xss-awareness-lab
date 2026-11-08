@@ -1,0 +1,12 @@
+# Editor / tool metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Claude Code session metadata
+.claude/
+
+# Local server noise
+*.log
+__pycache__/

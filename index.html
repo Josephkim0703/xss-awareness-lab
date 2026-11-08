@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>myNorthgate — Northgate Polytechnic Student Portal</title>
+  <meta name="description" content="Northgate Polytechnic student portal: courses, announcements, the student Q&A board, and myPortal sign-in." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="portal.css" />
+</head>
+<body>
+
+  <div class="util-bar">
+    <div class="util-inner">
+      <span class="util-left">Northgate Polytechnic · Est. 1971</span>
+      <nav class="util-right">
+        <a href="#">Apply</a>
+        <a href="#">Library</a>
+        <a href="#">Campus Map</a>
+        <a href="#login">myPortal</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top">
+        <span class="crest" aria-hidden="true">
+          <svg viewBox="0 0 48 48" width="40" height="40">
+            <path d="M24 3 6 11v12c0 11 8 19 18 22 10-3 18-11 18-22V11L24 3Z" fill="#7d3140"/>
+            <path d="M24 3 6 11v12c0 11 8 19 18 22 10-3 18-11 18-22V11L24 3Z" fill="none" stroke="#ffffff" stroke-width="1.5"/>
+            <text x="24" y="30" text-anchor="middle" font-family="Source Serif 4, serif" font-size="18" fill="#ffffff" font-weight="700">N</text>
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>Northgate Polytechnic</strong>
+          <small>Student Portal · myNorthgate</small>
+        </span>
+      </a>
+
+      <nav class="main-nav" id="mainNav">
+        <a href="#top">Home</a>
+        <a href="#announcements">News</a>
+        <a href="#qa">Q&amp;A Board</a>
+        <a href="#events">Events</a>
+        <a href="#login">myPortal</a>
+      </nav>
+
+      <a href="#login" class="btn btn-primary btn-login">Sign in</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow">Fall 2026 term is live</p>
+          <h1>Welcome back to <span class="accent">myNorthgate</span>.</h1>
+          <p class="lede">Check announcements, register for courses, and get answers from fellow students on the Q&amp;A board — all in one place.</p>
+          <form class="course-search" id="courseSearch" role="search">
+            <input type="search" id="courseQuery" placeholder="Search courses, e.g. “CMPT 120”, “intro to psychology”…" aria-label="Search courses" />
+            <button type="submit" class="btn btn-primary">Search</button>
+          </form>
+          <p class="hero-hint" id="searchHint"></p>
+        </div>
+        <div class="hero-side">
+          <div class="side-card">
+            <h3>Quick links</h3>
+            <ul class="quicklinks">
+              <li><a href="#">📅 Academic calendar</a></li>
+              <li><a href="#">🎓 Register for courses</a></li>
+              <li><a href="#">💳 Tuition &amp; fees</a></li>
+              <li><a href="#">📚 Library catalogue</a></li>
+              <li><a href="#login">🔐 myPortal sign-in</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Announcements -->
+    <section class="section announcements" id="announcements">
+      <div class="section-head">
+        <h2>Campus announcements</h2>
+        <a href="#" class="see-all">See all →</a>
+      </div>
+      <div class="cards" id="newsCards"><!-- filled by portal.js --></div>
+    </section>
+
+    <!-- Q&A BOARD -->
+    <section class="section qa" id="qa">
+      <div class="section-head">
+        <h2>Student Q&amp;A Board</h2>
+        <span class="muted"><span id="qaCount">0</span> questions · <span id="onlineCount">0</span> students online</span>
+      </div>
+
+
+      <div class="qa-layout">
+        <div class="qa-main">
+          <div class="qa-tabs" id="qaTabs">
+            <button class="tab active" data-cat="all">All</button>
+            <button class="tab" data-cat="Courses">Courses</button>
+            <button class="tab" data-cat="Registration">Registration</button>
+            <button class="tab" data-cat="Campus Life">Campus Life</button>
+            <button class="tab" data-cat="IT &amp; Portal">IT &amp; Portal</button>
+          </div>
+          <div class="qa-search">
+            <input type="search" id="qaSearch" placeholder="Search the board…" aria-label="Search questions" />
+          </div>
+          <ul class="qa-list" id="qaList"><!-- filled by portal.js --></ul>
+        </div>
+
+        <aside class="qa-ask">
+          <div class="ask-card">
+            <h3>Ask a question</h3>
+            <p class="muted">Posting as a signed-in student. Be specific so classmates can help.</p>
+            <form id="askForm">
+              <label>Title
+                <input type="text" id="qTitle" name="title" placeholder="e.g. Is CMPT 120 heavy on math?" required />
+              </label>
+              <label>Category
+                <select id="qCategory" name="category">
+                  <option>Courses</option>
+                  <option>Registration</option>
+                  <option>Campus Life</option>
+                  <option>IT &amp; Portal</option>
+                </select>
+              </label>
+              <label>Your question
+                <textarea id="qBody" name="body" rows="4" placeholder="Add details — what have you tried, what are you stuck on?"></textarea>
+              </label>
+              <button type="submit" class="btn btn-primary">Post question</button>
+            </form>
+            <p class="ask-status" id="askStatus" hidden></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- Events -->
+    <section class="section events" id="events">
+      <div class="section-head"><h2>Upcoming events</h2></div>
+      <div class="events-list" id="eventsList"><!-- filled by portal.js --></div>
+    </section>
+
+    <!-- myPortal LOGIN -->
+    <section class="section login" id="login">
+      <div class="login-card">
+        <div class="login-brand">
+          <span class="crest-sm" aria-hidden="true">N</span>
+          <div>
+            <h2>myPortal sign-in</h2>
+            <p class="muted">Use your Northgate student ID and password.</p>
+          </div>
+        </div>
+        <form id="loginForm" autocomplete="on">
+          <label>Student ID
+            <input type="text" id="studentId" name="studentId" placeholder="e.g. 100XXXXXX" required />
+          </label>
+          <label>Password
+            <input type="password" id="password" name="password" placeholder="Password" required />
+          </label>
+          <div class="login-row">
+            <label class="remember"><input type="checkbox" id="remember" /> Keep me signed in</label>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Sign in to myPortal</button>
+          <p class="login-status" id="loginStatus" hidden></p>
+        </form>
+        <p class="login-foot muted">Protected by Northgate Secure Sign-On. Do not share your credentials.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <strong>Northgate Polytechnic</strong>
+        <p class="muted">1 College Way, Riverside Campus<br />Student Services: (000) 555-0100</p>
+      </div>
+      <nav class="footer-links">
+        <a href="#">Privacy</a>
+        <a href="#">Accessibility</a>
+        <a href="#">IT Help Desk</a>
+        <a href="#">Contact</a>
+      </nav>
+      <p class="footer-note muted">Demo student portal · fictional institution · built for a security-awareness lab.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="portal.js"></script>
+</body>
+</html>
