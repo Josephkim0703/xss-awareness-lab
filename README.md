@@ -1,12 +1,10 @@
 # XSS Awareness Lab
 
 An educational web-security demo built around a fictional student portal
-("Northgate Polytechnic") and a Y2K-themed browser photo booth. It shows
-how **stored cross-site scripting (XSS)** on an ordinary-looking page
-can chain into a browser-exploitation framework (**BeEF**) inside an
-isolated, authorized lab.
+("Northgate Polytechnic"). It shows how **stored cross-site scripting
+(XSS)** on an ordinary-looking page can chain into a browser-exploitation
+framework (**BeEF**) inside an isolated, authorized lab.
 
-**🌐 Live demo (safe render):** _enabled once GitHub Pages is live_
 **🧪 Local lab:** clone and run on `localhost` — the Q&A board becomes
 vulnerable, so posting a crafted question hooks everyone who views the
 board via BeEF.
@@ -65,10 +63,7 @@ Juice Shop) does, and for the same reason.
 ## Tech used
 
 - **Vanilla HTML / CSS / JavaScript** — no framework, no build step.
-- **Google Fonts** (Inter, Source Serif 4) for the portal; Mochiy Pop
-  One for the Y2K photo-booth theme.
-- **`getUserMedia` + Canvas 2D filters** in the photo-booth page for a
-  real live-camera demo (12 filters, photo strip, download).
+- **Google Fonts** (Inter, Source Serif 4) for the portal.
 - **GitHub Pages** for the safe public deployment.
 - **BeEF** (external — you run it on your own lab host) as the C2 for
   the hook demonstration.
@@ -90,7 +85,7 @@ walkthrough.
 index.html       myNorthgate student portal (main page)
 portal.css       University theme (burgundy + charcoal)
 portal.js        Q&A board, ask form, search, sign-in (lab-mode gated)
-booth.html       Y2K photo-booth alternate demo host
+booth.html       Alternate photo-booth demo host (optional)
 styles.css       Base styles for the photo booth
 theme-y2k.css    Y2K / holographic skin for the photo booth
 app.js           Camera + live canvas filters + photo strip
