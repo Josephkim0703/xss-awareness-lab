@@ -12,6 +12,17 @@
 </head>
 <body>
 
+  <!-- Lab-demo mode toggle (fixed top-right). Safe by default; flip on
+       to render Q&A posts unescaped and enable the stored-XSS demo. -->
+  <div class="demo-toggle" id="demoToggle" data-mode="safe">
+    <span class="dt-icon" id="dtIcon">🔒</span>
+    <span class="dt-label" id="dtLabel">Safe mode</span>
+    <label class="dt-switch" title="Toggle lab demo mode">
+      <input type="checkbox" id="demoToggleInput" />
+      <span class="dt-slider"></span>
+    </label>
+  </div>
+
   <div class="util-bar">
     <div class="util-inner">
       <span class="util-left">Northgate Polytechnic · Est. 1971</span>

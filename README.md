@@ -69,19 +69,23 @@ other — a perfectly-coded site still loses a user on a rogue hotspot,
 and a perfectly-encrypted session on a vulnerable site is still
 exploitable.
 
-## Live site vs. local lab
+## Safe mode vs. demo mode
 
-| Host                                              | Q&A rendering       | Why                                         |
-|---------------------------------------------------|---------------------|---------------------------------------------|
-| `localhost`, `127.x`, `file://`, `*.local`, `*.lan`, `*.internal` | **Unescaped** (lab) | Intended demo environment                   |
-| RFC1918 LAN addresses — `10.x`, `172.16–31.x`, `192.168.x`         | **Unescaped** (lab) | Normal demo setup — victim VM reaches attacker by LAN IP |
-| Any public hostname (e.g. GitHub Pages)           | **Escaped** (safe)  | Deliberately-vulnerable apps shouldn't be publicly reachable |
+The Q&A board's rendering is controlled by the **Safe / Demo** toggle in
+the top-right corner of every page — not by the hostname.
 
-The decision is a hostname check at the top of [`portal.js`](portal.js).
-This is deliberate: hosting live stored-XSS on the public web turns a
-demo into a real attack surface. Running the lab locally is also what
-every mainstream intentionally-vulnerable training app (DVWA, WebGoat,
-Juice Shop) does, and for the same reason.
+| Toggle state           | Q&A rendering       | When to use                                 |
+|------------------------|---------------------|---------------------------------------------|
+| **Safe mode** (default) | **Escaped**         | Normal viewing, GitHub Pages demo, screenshots. Any posted payload renders as literal text. |
+| **Demo mode**           | **Unescaped**       | Flip this on for the stored-XSS → BeEF walkthrough. A posted `<script>` or `<img onerror>` executes on view. |
+
+The toggle state is remembered per browser via `localStorage`, so a
+reload keeps the mode you picked. The "stored" XSS here is really
+*per-browser-session* — questions live only in the page's in-memory
+array, not on a server, so a payload one visitor posts never reaches
+another visitor's browser. That's why the page is safe to leave
+publicly reachable: flipping the toggle only affects the browser doing
+the flipping.
 
 ## Tech used
 

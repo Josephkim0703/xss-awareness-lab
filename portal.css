@@ -160,6 +160,32 @@ input:focus, select:focus, textarea:focus { outline: none; border-color: var(--n
 .footer-links a:hover { color: #fff; text-decoration: underline; }
 .footer-note { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,.12); padding-top: 16px; font-size: 13px; }
 
+/* Demo-mode toggle (fixed top-right) */
+.demo-toggle {
+  position: fixed; top: 12px; right: 14px; z-index: 200;
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; border-radius: 999px;
+  background: #ffffff; border: 1.5px solid #c8d6e5;
+  box-shadow: 0 4px 16px rgba(11,46,92,0.15);
+  font-size: 13px; font-weight: 600; color: var(--ink);
+  transition: background .2s, border-color .2s, box-shadow .2s;
+  user-select: none;
+}
+.demo-toggle[data-mode="safe"]  { background: #ecfdf3; border-color: #a7e3bf; color: #155a2e; }
+.demo-toggle[data-mode="demo"]  { background: #fde3e3; border-color: #e9a1a1; color: #7a1818; animation: demo-pulse 2s ease-in-out infinite; box-shadow: 0 6px 20px rgba(192,57,43,0.35); }
+@keyframes demo-pulse {
+  0%,100% { box-shadow: 0 6px 20px rgba(192,57,43,0.35); }
+  50%     { box-shadow: 0 6px 28px rgba(192,57,43,0.6); }
+}
+.dt-icon  { font-size: 15px; }
+.dt-label { letter-spacing: .02em; }
+.dt-switch { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.dt-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.dt-slider { width: 36px; height: 20px; background: #c0c6cf; border-radius: 999px; position: relative; transition: background .2s; }
+.dt-slider::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.2); transition: transform .2s; }
+.dt-switch input:checked + .dt-slider { background: #c0392b; }
+.dt-switch input:checked + .dt-slider::after { transform: translateX(16px); }
+
 /* Toast */
 .toast { position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%) translateY(20px); background: var(--navy); color: #fff; padding: 13px 22px; border-radius: 10px; box-shadow: var(--shadow-lg); opacity: 0; transition: opacity .25s, transform .25s; z-index: 100; font-weight: 500; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

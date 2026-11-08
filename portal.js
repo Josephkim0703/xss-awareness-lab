@@ -36,34 +36,16 @@
   let activeCat = "all";
   let search = "";
 
-  // LAB DEMO: when running locally (localhost / 127.0.0.1 / file://), the
-  // Q&A board renders question titles and bodies UNESCAPED so a posted
-  // <script src="…hook.js"></script> executes for anyone viewing the
-  // thread (stored XSS). On any public hostname (e.g. GitHub Pages) the
-  // board renders safely via the esc() helper — a deliberately-vulnerable
-  // app should not be publicly reachable, and this file serves as a
-  // portfolio/education piece there, not a live attack surface.
-  const LAB_MODE = (() => {
-    try {
-      const h = location.hostname;
-      // Private / non-routable hosts count as "lab":
-      //  - file:// and empty host
-      //  - localhost, 127.x.x.x, *.localhost, *.local, *.lan, *.internal
-      //  - RFC1918 LAN addresses: 10.x, 172.16-31.x, 192.168.x
-      //  - Link-local 169.254.x
-      // Public hostnames (e.g. GitHub Pages) stay safe.
-      if (location.protocol === "file:" || h === "") return true;
-      if (h === "localhost" || h.endsWith(".localhost")) return true;
-      if (h.endsWith(".local") || h.endsWith(".lan") || h.endsWith(".internal")) return true;
-      if (/^127\./.test(h)) return true;
-      if (/^10\./.test(h)) return true;
-      if (/^192\.168\./.test(h)) return true;
-      if (/^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(h)) return true;
-      if (/^169\.254\./.test(h)) return true;
-      return false;
-    } catch (e) {
-      return false;
-    }
+  // LAB DEMO: controlled by the fixed top-right "Safe mode / Demo mode"
+  // toggle. Safe by default so the Q&A board escapes everything. When
+  // flipped to Demo mode, the board renders question titles/bodies
+  // UNESCAPED so a posted <script src="…hook.js"></script> executes for
+  // anyone viewing the thread (stored XSS). The setting is persisted in
+  // localStorage so a reload keeps the mode you chose.
+  const LAB_MODE_KEY = "lensNorth_demoMode";
+  let LAB_MODE = (() => {
+    try { return localStorage.getItem(LAB_MODE_KEY) === "1"; }
+    catch (e) { return false; }
   })();
 
   // ---------- Render: news ----------
@@ -225,6 +207,36 @@
       t.classList.remove("show");
       setTimeout(() => (t.hidden = true), 300);
     }, 2600);
+  }
+
+  // ---------- Demo-mode toggle (fixed top-right) ----------
+  const toggleEl = $("demoToggle");
+  const toggleInput = $("demoToggleInput");
+  const toggleIcon = $("dtIcon");
+  const toggleLabel = $("dtLabel");
+
+  function applyToggleUI() {
+    if (!toggleEl) return;
+    toggleInput.checked = LAB_MODE;
+    toggleEl.dataset.mode = LAB_MODE ? "demo" : "safe";
+    toggleIcon.textContent = LAB_MODE ? "⚠" : "🔒";
+    toggleLabel.textContent = LAB_MODE ? "Demo mode" : "Safe mode";
+    toggleEl.title = LAB_MODE
+      ? "Demo mode: Q&A posts render unsanitized. Click to disable."
+      : "Safe mode: Q&A posts are escaped. Click to enable the stored-XSS demo.";
+  }
+  applyToggleUI();
+
+  if (toggleInput) {
+    toggleInput.addEventListener("change", (e) => {
+      LAB_MODE = !!e.target.checked;
+      try { localStorage.setItem(LAB_MODE_KEY, LAB_MODE ? "1" : "0"); } catch (err) {}
+      applyToggleUI();
+      renderQA();
+      toast(LAB_MODE
+        ? "⚠ Demo mode ON — posts render unsanitized."
+        : "Safe mode — posts are escaped.");
+    });
   }
 
   // ---------- "Students online" ticker (cosmetic) ----------
