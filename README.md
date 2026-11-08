@@ -71,10 +71,11 @@ exploitable.
 
 ## Live site vs. local lab
 
-| Host                                  | Q&A rendering       | Why                                         |
-|---------------------------------------|---------------------|---------------------------------------------|
-| `localhost` / `127.0.0.1` / `file://` | **Unescaped** (lab) | Intended demo environment                   |
-| Any public hostname (e.g. GitHub Pages) | **Escaped** (safe) | Deliberately-vulnerable apps shouldn't be publicly reachable |
+| Host                                              | Q&A rendering       | Why                                         |
+|---------------------------------------------------|---------------------|---------------------------------------------|
+| `localhost`, `127.x`, `file://`, `*.local`, `*.lan`, `*.internal` | **Unescaped** (lab) | Intended demo environment                   |
+| RFC1918 LAN addresses — `10.x`, `172.16–31.x`, `192.168.x`         | **Unescaped** (lab) | Normal demo setup — victim VM reaches attacker by LAN IP |
+| Any public hostname (e.g. GitHub Pages)           | **Escaped** (safe)  | Deliberately-vulnerable apps shouldn't be publicly reachable |
 
 The decision is a hostname check at the top of [`portal.js`](portal.js).
 This is deliberate: hosting live stored-XSS on the public web turns a

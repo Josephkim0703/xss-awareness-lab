@@ -179,9 +179,12 @@ module. Starting points:
   `Content-Security-Policy` would block an external `<script src>` even
   if an XSS existed. Bettercap's injection is similarly thwarted if the
   site is HTTPS with HSTS.
-- **Lab-mode gating** (`portal.js`) requires the host to be `localhost`,
-  `127.0.0.1`, `file://` or a `*.localhost` / `*.local` address. On
-  GitHub Pages or any other public hostname the board escapes
+- **Lab-mode gating** (`portal.js`) treats any non-routable host as a
+  lab: `localhost`, `127.x`, `file://`, `*.local` / `*.lan` /
+  `*.internal`, and RFC1918 LAN addresses (`10.x`, `172.16–31.x`,
+  `192.168.x`). That covers the normal case where the victim VM
+  reaches the attacker's server by LAN IP (`http://<attacker-IP>:8000`).
+  On GitHub Pages or any other public hostname the board escapes
   everything and the stored-XSS vector is inert.
 - **Bettercap scope**: ARP spoofing an unauthorized network is illegal
   in most jurisdictions. Only run it on networks you own or on an
